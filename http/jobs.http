@@ -1,3 +1,4 @@
 ### Get All Jobs
 
-GET http://localhost:8080/api/v1/jobs
+GET http://localhost:8080/api/v1/jobs?
+
