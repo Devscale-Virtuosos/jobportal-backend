@@ -40,6 +40,19 @@ const jobListRepository = {
       throw new Error("Failed to delete job");
     }
   },
+
+  getJobDetailById: async (id: string) => {
+    try {
+      const jobDetail = await jobListModel.findById(id).exec();
+      if (!jobDetail || jobDetail.deletedAt) {
+        throw new Error("Job not found");
+      }
+      return jobDetail;
+    } catch (error) {
+      console.error("Error retrieving job detail:", error);
+      throw new Error("Failed to retrieve job detail");
+    }
+  },
 };
 
 export default jobListRepository;

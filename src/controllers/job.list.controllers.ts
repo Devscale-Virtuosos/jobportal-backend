@@ -49,6 +49,21 @@ const jobListControllers = {
       });
     }
   },
+
+  getJobDetailById: async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params as { id: string };
+    try {
+      const jobDetail = await jobListServices.getJobDetailById(id);
+      if (jobDetail.data) {
+        res.status(200).json(jobDetail);
+      } else {
+        res.status(404).json({ message: "Job not found", data: null });
+      }
+    } catch (error) {
+      console.error("Error fetching job detail:", error);
+      res.status(500).json({ message: "Internal server error", data: null });
+    }
+  },
 };
 
 export default jobListControllers;

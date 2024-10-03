@@ -34,6 +34,25 @@ const jobListServices = {
       throw new Error("Failed to mark job as deleted");
     }
   },
+
+  getJobDetailById: async (id: string) => {
+    try {
+      const jobDetail = await jobListRepository.getJobDetailById(id);
+      if (!jobDetail || jobDetail.deletedAt) {
+        return {
+          message: "Job not found",
+          data: null,
+        };
+      }
+      return {
+        message: "Successfully retrieved job detail",
+        data: jobDetail,
+      };
+    } catch (error) {
+      console.error("Error retrieving job by ID:", error);
+      return { message: "Failed to retrieve job", data: null };
+    }
+  },
 };
 
 export default jobListServices;
