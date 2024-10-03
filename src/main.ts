@@ -3,9 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import { errorHandlerMiddleware } from "./middlewares";
-import { authRouter, jobRouter } from "./routes";
-import jobListRoute from "./routes/job.list.route";
-import applicantRoute from "./routes/applicant.list.route";
+import { applicantRouter, authRouter, jobRouter } from "./routes";
 import { connectMongodb, env } from "./utils";
 
 connectMongodb();
@@ -26,8 +24,8 @@ app.use(morgan("common")); // to log http request
  * Routes
  */
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/jobs", jobListRoute);
-app.use("/api/v1/applicants", applicantRoute); // Applicant routes
+app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/applicants", applicantRouter); // Applicant routes
 
 // error handler middleware, place it after all routes
 app.use(errorHandlerMiddleware);
