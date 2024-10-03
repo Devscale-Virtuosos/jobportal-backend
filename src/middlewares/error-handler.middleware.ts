@@ -15,5 +15,7 @@ export function errorHandlerMiddleware(
     : err?.message || "Something went wrong";
   const errStack = !statusCode ? err?.stack : {};
 
-  res.status(errStatus).json({ message: errMessage, stack: errStack });
+  res
+    .status(errStatus)
+    .json({ message: errMessage, stack: errStack, data: null });
 }

@@ -6,31 +6,19 @@ const applicantServices = {
     filter: ApplicantFilter,
     page: number,
     limit: number
-  ): Promise<ApplicantListResponse> => {
+  ) => {
     try {
       const applicants = await applicantRepository.getApplicants(
         filter,
         page,
         limit
       );
-      // Validate if no applicants are found
-      if (applicants.length === 0) {
-        return {
-          message: "No applicants found",
-          data: null,
-        };
-      }
+
       // Return the applicant data if found
-      return {
-        message: "Successfully retrieved applicants",
-        data: applicants,
-      };
+      return applicants;
     } catch (error) {
       console.error("Error retrieving applicants:", error);
-      return {
-        message: "Failed to retrieve applicants",
-        data: null,
-      };
+      throw error;
     }
   },
 

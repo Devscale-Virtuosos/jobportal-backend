@@ -1,6 +1,13 @@
-import express from "express";
+// src/routes/job.list.route.ts
+import { Router } from "express";
 import { JobControllers } from "../controllers";
 
-export const jobRouter = express.Router();
+export const jobRouter = Router();
 
-jobRouter.get("/", JobControllers.handleGetAllJobs);
+// Mendapatkan daftar pekerjaan
+jobRouter.get("/", JobControllers.getJobList);
+
+// Menghapus pekerjaan berdasarkan ID dengan soft delete
+jobRouter.delete("/:id", JobControllers.deleteJob);
+
+jobRouter.get("/:id", JobControllers.getJobDetailById);

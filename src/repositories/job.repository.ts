@@ -1,16 +1,27 @@
 import { JobFilter } from "../types/jobList";
 import jobListModel, { IJob } from "./models/job.list.model";
 
-const jobListRepository = {
-  getJobList: async (filter: JobFilter, page: number, limit: number): Promise<IJob[]> => {
+const JobRepository = {
+  getJobList: async (
+    filter: JobFilter,
+    page: number,
+    limit: number
+  ): Promise<IJob[]> => {
     const completeFilter: any = { deletedAt: null };
 
     // Terapkan $regex untuk pencarian teks agar lebih fleksibel
-    if (filter.title) completeFilter.title = { $regex: filter.title, $options: "i" };
-    if (filter.experienceLevel) completeFilter.experienceLevel = filter.experienceLevel;
+    if (filter.title)
+      completeFilter.title = { $regex: filter.title, $options: "i" };
+    if (filter.experienceLevel)
+      completeFilter.experienceLevel = filter.experienceLevel;
     if (filter.type) completeFilter.type = filter.type;
-    if (filter.placementType) completeFilter.placementType = filter.placementType;
-    if (filter.location) completeFilter["company.name"] = { $regex: filter.location, $options: "i" };
+    if (filter.placementType)
+      completeFilter.placementType = filter.placementType;
+    if (filter.location)
+      completeFilter["company.name"] = {
+        $regex: filter.location,
+        $options: "i",
+      };
 
     try {
       const jobs = await jobListModel
@@ -30,7 +41,11 @@ const jobListRepository = {
 
   softDeleteJob: async (id: string) => {
     try {
-      const result = await jobListModel.findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true });
+      const result = await jobListModel.findByIdAndUpdate(
+        id,
+        { deletedAt: new Date() },
+        { new: true }
+      );
       if (!result) {
         throw new Error("Job not found");
       }
@@ -55,4 +70,4 @@ const jobListRepository = {
   },
 };
 
-export default jobListRepository;
+export default JobRepository;
