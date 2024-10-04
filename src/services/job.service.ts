@@ -1,4 +1,6 @@
 import { JobRepositories } from "../repositories";
+import JobRepository from "../repositories/job.repository";
+import { IJob } from "../repositories/models/job.list.model";
 import { JobFilter, JobListResponse } from "../types/jobList";
 import { createError } from "../utils";
 
@@ -33,6 +35,17 @@ const jobListServices = {
     } catch (error) {
       console.error("Error retrieving job by ID:", error);
       throw error;
+    }
+  },
+
+  // src/services/job.list.service.ts
+  createJob: async (jobData: IJob): Promise<{ message: string; data: IJob | null }> => {
+    try {
+      const job = await JobRepository.createJob(jobData);
+      return job;
+    } catch (error) {
+      console.error("Error creating job:", error);
+      throw new Error("Failed to create job");
     }
   },
 };
