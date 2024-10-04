@@ -20,9 +20,7 @@ const JobControllers = {
 
     try {
       const result = await JobServices.getJobList(filter, page, limit);
-      res
-        .status(200)
-        .json({ message: "Successfully retrieved jobs", data: result });
+      res.status(200).json({ message: "Successfully retrieved jobs", data: result });
     } catch (error) {
       next(error);
     }
@@ -59,6 +57,24 @@ const JobControllers = {
       }
     } catch (error) {
       console.error("Error fetching job detail:", error);
+      next(error);
+    }
+  },
+
+  createJob: async (req: Request, res: Response, next: NextFunction) => {
+    const jobData = req.body;
+    try {
+      const job = await JobServices.createJob(jobData);
+      if (job) {
+        res.status(201).json({
+          message: "Successfully created job",
+          data: job,
+        });
+      } else {
+        throw createError(400, "Failed to create job");
+      }
+    } catch (error) {
+      console.error("Error creating job:", error);
       next(error);
     }
   },
