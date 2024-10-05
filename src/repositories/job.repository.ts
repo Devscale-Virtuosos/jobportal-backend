@@ -2,14 +2,21 @@ import { JobFilter } from "../types/jobList";
 import jobListModel, { IJob } from "./models/job.list.model";
 
 const JobRepository = {
-  getJobList: async (filter: JobFilter, page: number, limit: number): Promise<IJob[]> => {
+  getJobList: async (
+    filter: JobFilter,
+    page: number,
+    limit: number
+  ): Promise<IJob[]> => {
     const completeFilter: any = { deletedAt: null };
 
     // Terapkan $regex untuk pencarian teks agar lebih fleksibel
-    if (filter.title) completeFilter.title = { $regex: filter.title, $options: "i" };
-    if (filter.experienceLevel) completeFilter.experienceLevel = filter.experienceLevel;
+    if (filter.title)
+      completeFilter.title = { $regex: filter.title, $options: "i" };
+    if (filter.experienceLevel)
+      completeFilter.experienceLevel = filter.experienceLevel;
     if (filter.type) completeFilter.type = filter.type;
-    if (filter.placementType) completeFilter.placementType = filter.placementType;
+    if (filter.placementType)
+      completeFilter.placementType = filter.placementType;
     if (filter.location)
       completeFilter["company.name"] = {
         $regex: filter.location,
@@ -34,7 +41,11 @@ const JobRepository = {
 
   softDeleteJob: async (id: string) => {
     try {
-      const result = await jobListModel.findByIdAndUpdate(id, { deletedAt: new Date() }, { new: true });
+      const result = await jobListModel.findByIdAndUpdate(
+        id,
+        { deletedAt: new Date() },
+        { new: true }
+      );
       if (!result) {
         throw new Error("Job not found");
       }
@@ -62,7 +73,9 @@ const JobRepository = {
     try {
       const job = new jobListModel(jobData);
       const savedJob = await job.save();
-      return savedJob;
+      // populate the company data
+      const populatedJob = await savedJob.populate("companyId");
+      return populatedJob;
     } catch (error) {
       console.error("Error creating job:", error);
       throw new Error("Failed to create job");

@@ -1,7 +1,6 @@
 ### Get All Jobs
 
-GET http://localhost:8080/api/v1/jobs?page=1&limit=5&placementType="remote"
-
+GET http://localhost:8080/api/v1/jobs
 ### Get Job Details
 GET http://localhost:8080/api/v1/jobs/66ff923c464168801739de47
 
@@ -13,7 +12,7 @@ POST http://localhost:8080/api/v1/jobs
 Content-Type: application/json
 
 {
- "title": "Frontend Developer Anjay Gurinjay",
+  "title": "Frontend Developer Anjay Gurinjay",
   "description": "Responsible for full stack development",
   "experienceLevel": "senior",
   "requiredSkills": ["Next.js", "React", "MongoDB"],
@@ -21,6 +20,34 @@ Content-Type: application/json
   "placementType": "remote",
   "location": "New York",
   "status": "draft",
-#   "companyId": "60c72b2f9b1d4c6d885f1e1d",
-  "userId": "60c72b2f9b1d4c6d885f1e1e"
+  "companyId": "670193fe209eb8d609448570"
+
+}
+
+###
+POST http://localhost:3000/api/jobs
+Content-Type: application/json
+Cookie: user={"id": "64f1c0f1bcf86cd799439010"}
+
+{
+  "title": "Full Stack Developer",
+  "description": "Responsible for building web applications",
+  "experienceLevel": "mid",
+  "requiredSkills": ["JavaScript", "Node.js", "React"],
+  "type": "full_time",
+  "placementType": "remote",
+  "location": "San Francisco",
+  "companyId": "64f1c0f1bcf86cd799439011"
+}
+
+
+### create company
+POST http://localhost:8080/api/v1/company
+Content-Type: application/json
+
+{
+  "name": "Tech Solutions Inc.",
+  "location": "San Francisco",
+  "industry": "Technology",
+  "description": "A leading company in tech solutions."
 }

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { JobFilter } from "../types/jobList";
-import { JobServices } from "../services";
+import { CompanyServices, JobServices } from "../services";
 import { createError } from "../utils";
 
 const JobControllers = {
@@ -20,7 +20,9 @@ const JobControllers = {
 
     try {
       const result = await JobServices.getJobList(filter, page, limit);
-      res.status(200).json({ message: "Successfully retrieved jobs", data: result });
+      res
+        .status(200)
+        .json({ message: "Successfully retrieved jobs", data: result });
     } catch (error) {
       next(error);
     }
@@ -62,20 +64,44 @@ const JobControllers = {
   },
 
   createJob: async (req: Request, res: Response, next: NextFunction) => {
-    const jobData = req.body;
+    const userCookie = req.cookies.user;
+
+    if (!userCookie) return next(createError(401, "Unauthorized"));
+
+    const userData = JSON.parse(userCookie);
+
     try {
-      const job = await JobServices.createJob(jobData);
-      if (job) {
-        res.status(201).json({
-          message: "Successfully created job",
-          data: job,
-        });
-      } else {
-        throw createError(400, "Failed to create job");
+      const { companyId, userId, ...jobData } = req.body;
+
+      // Cek apakah companyId ada
+      if (!companyId) {
+        return next(createError(400, "Company ID is required to create a job"));
       }
+
+      // Cek apakah userId dari body cocok dengan userData.id dari cookie
+      if (userData.id !== userId) {
+        return next(createError(403, "Forbidden: User ID mismatch"));
+      }
+
+      // Verifikasi keberadaan perusahaan
+      const company = await CompanyServices.getCompanyById(companyId);
+      if (!company) {
+        return next(createError(404, "Company not found"));
+      }
+
+      // Membuat pekerjaan baru
+      const newJob = await JobServices.createJob({
+        ...jobData,
+        createdBy: userData.id, // Menggunakan id dari cookie
+        companyId: companyId,
+      });
+
+      // Mengembalikan respons sukses
+      res
+        .status(201)
+        .json({ message: "Job created successfully", data: newJob });
     } catch (error) {
-      console.error("Error creating job:", error);
-      next(error);
+      next(error); // Menangani kesalahan lainnya
     }
   },
 };

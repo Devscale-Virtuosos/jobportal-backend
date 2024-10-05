@@ -39,13 +39,26 @@ const jobListServices = {
   },
 
   // src/services/job.list.service.ts
-  createJob: async (jobData: IJob): Promise<{ message: string; data: IJob | null }> => {
+  createJob: async (
+    jobData: Omit<IJob, "company"> & { companyId: string }
+  ): Promise<{ message: string; data: IJob | null }> => {
     try {
+      // const company = await CompanyServices.getCompanyById(jobData.companyId);
+      // if (!company) {
+      //   throw createError(404, "Company not found");
+      // }
       const job = await JobRepository.createJob(jobData);
-      return job;
+      return {
+        message: "Job created successfully",
+        data: job,
+      };
     } catch (error) {
       console.error("Error creating job:", error);
-      throw new Error("Failed to create job");
+      if (error instanceof Error) {
+        throw createError(500, error.message);
+      } else {
+        throw createError(500, "An unexpected error occurred");
+      }
     }
   },
 };
