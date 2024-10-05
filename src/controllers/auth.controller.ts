@@ -34,13 +34,13 @@ const AuthControllers = {
     res: Response,
     next: NextFunction
   ) => {
+    // get from URL
+    const code = req.query.code as string;
+
+    // get from Cookies
+    const { codeVerifier, role } = req.cookies;
+
     try {
-      // get from URL
-      const code = req.query.code as string;
-
-      // get from Cookies
-      const { codeVerifier, role } = req.cookies;
-
       let accessToken = "";
       let refreshToken = "";
       let payload: TTokenPayload = null;
@@ -82,7 +82,9 @@ const AuthControllers = {
         .clearCookie("codeVerifier")
         .clearCookie("role")
         .redirect(
-          `${env.CLIENT_AUTH_FAILED_REDIRECT_URL}?message=${error.message}`
+          `${env.CLIENT_URL}${
+            role ? "/register" : "/login"
+          }?error=true&message=${error.message}`
         );
     }
   },

@@ -14,5 +14,5 @@ export const env = cleanEnv(process.env, {
   ACCESS_TOKEN_EXPIRES_TIME: str(),
   REFRESH_TOKEN_EXPIRES_TIME: str(),
   CLIENT_AUTH_SUCCESS_REDIRECT_URL: str(),
-  CLIENT_AUTH_FAILED_REDIRECT_URL: str(),
+  CLIENT_URL: str(),
 });
