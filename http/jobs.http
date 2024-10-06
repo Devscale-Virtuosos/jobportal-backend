@@ -1,6 +1,11 @@
 ### Get All Jobs
 
+<<<<<<< HEAD
 GET http://localhost:8080/api/v1/jobs
+=======
+GET http://localhost:8080/api/v1/jobs?page=1&limit=5&placementType="remote"
+
+>>>>>>> 96154a15139a2188f51c5ae8fc763453562009c5
 ### Get Job Details
 GET http://localhost:8080/api/v1/jobs/66ff923c464168801739de47
 
@@ -8,6 +13,7 @@ GET http://localhost:8080/api/v1/jobs/66ff923c464168801739de47
 GET http://localhost:8080/api/v1/applicants
 
 ### create job
+<<<<<<< HEAD
 ### Create Job
 POST http://localhost:8080/api/v1/jobs 
 Content-Type: application/json
@@ -32,3 +38,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDIzZmQzM
 
 
 
+=======
+POST http://localhost:8080/api/v1/jobs
+Content-Type: application/json
+
+{
+ "title": "Frontend Developer Anjay Gurinjay",
+  "description": "Responsible for full stack development",
+  "experienceLevel": "senior",
+  "requiredSkills": ["Next.js", "React", "MongoDB"],
+  "type": "full_time",
+  "placementType": "remote",
+  "location": "New York",
+  "status": "draft",
+#   "companyId": "60c72b2f9b1d4c6d885f1e1d",
+  "userId": "60c72b2f9b1d4c6d885f1e1e"
+}
+>>>>>>> 96154a15139a2188f51c5ae8fc763453562009c5

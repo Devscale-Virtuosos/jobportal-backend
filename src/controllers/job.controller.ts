@@ -21,9 +21,7 @@ const JobControllers = {
 
     try {
       const result = await JobServices.getJobList(filter, page, limit);
-      res
-        .status(200)
-        .json({ message: "Successfully retrieved jobs", data: result });
+      res.status(200).json({ message: "Successfully retrieved jobs", data: result });
     } catch (error) {
       next(error);
     }
