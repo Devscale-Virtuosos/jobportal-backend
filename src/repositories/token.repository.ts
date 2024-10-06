@@ -10,6 +10,14 @@ const TokenRepositories = {
       throw error;
     }
   },
+  getByToken: async (refreshToken: string) => {
+    try {
+      const findToken = await TokenModel.findOne({ token: refreshToken });
+      return findToken;
+    } catch (error) {
+      throw error;
+    }
+  },
   create: async (token: TToken) => {
     try {
       const createToken = new TokenModel(token);
