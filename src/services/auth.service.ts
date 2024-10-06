@@ -1,7 +1,12 @@
 import { generateCodeVerifier, generateState } from "arctic";
 import jwt from "jsonwebtoken";
-import { TokenRepositories, UserRepositories } from "../repositories";
-import { IGoogleUserInfo, TTokenPayload } from "../types";
+import { ROLE } from "../constants";
+import {
+  CompanyRepositories,
+  TokenRepositories,
+  UserRepositories,
+} from "../repositories";
+import { IGoogleUserInfo } from "../types";
 import { createError, env, google } from "../utils";
 
 const AuthServices = {
@@ -57,6 +62,18 @@ const AuthServices = {
         picture: user.picture,
         role,
       });
+
+      // if register as recruiter then create initial company details
+      if (role === ROLE.RECRUITER) {
+        await CompanyRepositories.create({
+          userId: newUser._id,
+          name: `${newUser.name}'s Company`,
+          location: "-",
+          industry: "-",
+          description: "-",
+          logo: "",
+        });
+      }
 
       // generate Session ID
       const tokenPayload = {
