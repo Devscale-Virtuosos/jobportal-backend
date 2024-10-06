@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { JobFilter } from "../types/jobList";
-import { CompanyServices, JobServices } from "../services";
+import { JobServices } from "../services";
 import { createError } from "../utils";
+import CompanyService from "../services/company.service";
 
 const JobControllers = {
   getJobList: async (req: Request, res: Response, next: NextFunction) => {
@@ -73,35 +74,36 @@ const JobControllers = {
     try {
       const { companyId, userId, ...jobData } = req.body;
 
-      // Cek apakah companyId ada
+      // Check if companyId exists
       if (!companyId) {
         return next(createError(400, "Company ID is required to create a job"));
       }
 
-      // Cek apakah userId dari body cocok dengan userData.id dari cookie
+      // Check if userId matches userData.id from cookie
       if (userData.id !== userId) {
         return next(createError(403, "Forbidden: User ID mismatch"));
       }
 
-      // Verifikasi keberadaan perusahaan
-      const company = await CompanyServices.getCompanyById(companyId);
+      // Verify company existence
+      const company = await CompanyService.getCompanyById(companyId);
       if (!company) {
         return next(createError(404, "Company not found"));
       }
 
-      // Membuat pekerjaan baru
+      // Create new job
       const newJob = await JobServices.createJob({
         ...jobData,
-        createdBy: userData.id, // Menggunakan id dari cookie
+        createdBy: userData.id, // Use id from cookie
         companyId: companyId,
       });
 
-      // Mengembalikan respons sukses
+      // Return success response
       res
         .status(201)
         .json({ message: "Job created successfully", data: newJob });
     } catch (error) {
-      next(error); // Menangani kesalahan lainnya
+      console.error("Error creating job:", error); // Log detailed error
+      next(createError(500, "Failed to create job")); // Send generic error message
     }
   },
 };

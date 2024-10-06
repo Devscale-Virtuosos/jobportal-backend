@@ -8,46 +8,27 @@ GET http://localhost:8080/api/v1/jobs/66ff923c464168801739de47
 GET http://localhost:8080/api/v1/applicants
 
 ### create job
-POST http://localhost:8080/api/v1/jobs
+### Create Job
+POST http://localhost:8080/api/v1/jobs 
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MDIzZmQzMGY5Yjg3YzJiNWY0N2ZlMCIsIm5hbWUiOiIxNDJfU2luZ2dpaCBTZXB0aWFuIE51Z3JhaGEiLCJlbWFpbCI6InNlcHRpYW5zaW5nZ2loOTNAZ21haWwuY29tIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0xtOWRmMTR2d19SV0ZiV0FGN3VkRXFFMGJieXc0bGhVVWd2UU00U3d0eUNCZUNGQUJYdlE9czk2LWMiLCJyb2xlIjoicmVjcnVpdGVyIiwiaWF0IjoxNzI4MjAwNzA3LCJleHAiOjE3Mjg4MDU1MDd9.eygnqy4CU9bkfhV9NfzfwHFdlA8pz_YITTz2mTAsM1M
 
 {
-  "title": "Frontend Developer Anjay Gurinjay",
-  "description": "Responsible for full stack development",
-  "experienceLevel": "senior",
-  "requiredSkills": ["Next.js", "React", "MongoDB"],
+  "title": "Software Engineer",
+  "description": "Develop and maintain web applications.",
+  "requiredSkills": ["JavaScript", "React", "Node.js"],
+  "experienceLevel": "Mid-level",
   "type": "full_time",
   "placementType": "remote",
-  "location": "New York",
-  "status": "draft",
-  "companyId": "670193fe209eb8d609448570"
-
-}
-
-###
-POST http://localhost:3000/api/jobs
-Content-Type: application/json
-Cookie: user={"id": "64f1c0f1bcf86cd799439010"}
-
-{
-  "title": "Full Stack Developer",
-  "description": "Responsible for building web applications",
-  "experienceLevel": "mid",
-  "requiredSkills": ["JavaScript", "Node.js", "React"],
-  "type": "full_time",
-  "placementType": "remote",
-  "location": "San Francisco",
-  "companyId": "64f1c0f1bcf86cd799439011"
+  "location": "Remote",
+  "companyId": "67023fd30f9b87c2b5f47fe2",  
+  "userId": "67023fd30f9b87c2b5f47fe0"   
 }
 
 
-### create company
-POST http://localhost:8080/api/v1/company
-Content-Type: application/json
 
-{
-  "name": "Tech Solutions Inc.",
-  "location": "San Francisco",
-  "industry": "Technology",
-  "description": "A leading company in tech solutions."
-}
+
+
+
+
+
