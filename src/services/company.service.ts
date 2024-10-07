@@ -1,10 +1,10 @@
 import { CompanyRepositories } from "../repositories";
-import { createError } from "../utils";
+import { TCompany } from "../repositories/models";
+import { createError, generateErrorMessage } from "../utils";
 import { Types } from "mongoose"; // Pastikan ini diimport
+import { validateInputCompany } from "../validations";
 
-const CompanyService = {
-  // Fungsi lainnya...
-
+const CompanyServices = {
   getCompanyById: async (companyId: string) => {
     // Konversi companyId dari string ke Types.ObjectId
     const id = new Types.ObjectId(companyId);
@@ -15,6 +15,27 @@ const CompanyService = {
     }
     return company;
   },
+  update: async (companyId: string, updatedData: TCompany) => {
+    try {
+      // Input validation
+      const validationResult = validateInputCompany(updatedData);
+      if (!validationResult.success) {
+        throw createError(
+          400,
+          generateErrorMessage(validationResult.error.issues)
+        );
+      }
+
+      // Konversi companyId dari string ke Types.ObjectId
+      const id = new Types.ObjectId(companyId);
+
+      const updatedCompany = await CompanyRepositories.update(id, updatedData);
+
+      return updatedCompany;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
-export default CompanyService;
+export default CompanyServices;
