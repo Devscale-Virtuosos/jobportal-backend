@@ -68,6 +68,19 @@ const JobRepository = {
       throw new Error("Failed to retrieve job detail");
     }
   },
+
+  createJob: async (jobData: IJob) => {
+    try {
+      const job = new jobListModel(jobData);
+      const savedJob = await job.save();
+      // populate the company data
+      const populatedJob = await savedJob.populate("companyId");
+      return populatedJob;
+    } catch (error) {
+      console.error("Error creating job:", error);
+      throw new Error("Failed to create job");
+    }
+  },
 };
 
 export default JobRepository;

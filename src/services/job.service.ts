@@ -1,4 +1,6 @@
 import { JobRepositories } from "../repositories";
+import JobRepository from "../repositories/job.repository";
+import { IJob } from "../repositories/models/job.list.model";
 import { JobFilter, JobListResponse } from "../types/jobList";
 import { createError } from "../utils";
 
@@ -33,6 +35,30 @@ const jobListServices = {
     } catch (error) {
       console.error("Error retrieving job by ID:", error);
       throw error;
+    }
+  },
+
+  // src/services/job.list.service.ts
+  createJob: async (
+    jobData: Omit<IJob, "company"> & { companyId: string }
+  ): Promise<{ message: string; data: IJob | null }> => {
+    try {
+      // const company = await CompanyServices.getCompanyById(jobData.companyId);
+      // if (!company) {
+      //   throw createError(404, "Company not found");
+      // }
+      const job = await JobRepository.createJob(jobData);
+      return {
+        message: "Job created successfully",
+        data: job,
+      };
+    } catch (error) {
+      console.error("Error creating job:", error);
+      if (error instanceof Error) {
+        throw createError(500, error.message);
+      } else {
+        throw createError(500, "An unexpected error occurred");
+      }
     }
   },
 };

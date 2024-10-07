@@ -12,3 +12,4 @@ jobRouter.get("/", JobControllers.getJobList);
 jobRouter.delete("/:id", verifyAccessToken, JobControllers.deleteJob);
 
 jobRouter.get("/:id", JobControllers.getJobDetailById);
+jobRouter.post("/", JobControllers.createJob);

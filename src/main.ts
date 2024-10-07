@@ -23,6 +23,7 @@ app.use(morgan("common")); // to log http request
 /**
  * Routes
  */
+
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", jobRouter);
 app.use("/api/v1/applicants", applicantRouter); // Applicant routes
