@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { JobFilter } from "../types/jobList";
-import { JobServices } from "../services";
+import { CompanyServices, JobServices } from "../services";
 import { createError } from "../utils";
-import CompanyService from "../services/company.service";
 
 const JobControllers = {
   getJobList: async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +20,9 @@ const JobControllers = {
 
     try {
       const result = await JobServices.getJobList(filter, page, limit);
-      res.status(200).json({ message: "Successfully retrieved jobs", data: result });
+      res
+        .status(200)
+        .json({ message: "Successfully retrieved jobs", data: result });
     } catch (error) {
       next(error);
     }
@@ -83,7 +84,7 @@ const JobControllers = {
       }
 
       // Verify company existence
-      const company = await CompanyService.getCompanyById(companyId);
+      const company = await CompanyServices.getCompanyById(companyId);
       if (!company) {
         return next(createError(404, "Company not found"));
       }

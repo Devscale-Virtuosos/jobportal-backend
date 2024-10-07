@@ -27,6 +27,17 @@ const CompanyRepositories = {
       throw error;
     }
   },
+  update: async (companyId: Types.ObjectId, updatedData: TCompany) => {
+    try {
+      const updatedCompany = await CompanyModel.findByIdAndUpdate(
+        companyId,
+        updatedData
+      );
+      return updatedCompany;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default CompanyRepositories;
