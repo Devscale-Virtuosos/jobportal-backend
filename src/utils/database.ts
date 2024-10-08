@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-
 import { env } from "./env";
 import applicantModel from "../repositories/models/applicant.list.model";
+import applicationModel from "../repositories/models/application.model";
 import jobListModel from "../repositories/models/job.list.model";
 
 // insert sample jobs data
@@ -58,6 +58,45 @@ const insertApplicant = async () => {
     console.log("Applicant inserted:", savedApplicant);
   } catch (error) {
     console.error("Error inserting applicant:", error);
+  }
+};
+
+const insertApplication = async () => {
+  const application = new applicationModel({
+    user: {
+      id: "asadas",
+      name: "Indra",
+    },
+    jobDetail: {
+      id: "asdasd",
+      title: "Frontend Engineer",
+      description: "FE using MERN Stack",
+      experienceLevel: "Senior",
+      company: {
+        name: "Virtuosos",
+        id: "asd123",
+        userId: "asduser123",
+        location: "Indonesia",
+        industry: "IT",
+        description: "IT Company",
+        logo: "itlogo.com",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      },
+    },
+    resumeId: "uuid",
+    status: "applied",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  });
+
+  try {
+    const savedApplication = await application.save();
+    console.log("Application inserted:", savedApplication);
+  } catch (error) {
+    console.error("Error inserting application:", error);
   }
 };
 
