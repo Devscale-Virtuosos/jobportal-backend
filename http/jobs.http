@@ -8,6 +8,13 @@ GET http://localhost:8080/api/v1/jobs/66ff923c464168801739de47
 ### Get Applicant List
 GET http://localhost:8080/api/v1/applicants
 
+### Get Application List for Job Hunter
+GET http://localhost:8080/api/v1/applications
+
+
+### Get Application Details for Job Hunter
+GET http://localhost:8080/api/v1/applications/{:id}
+
 ### create job
 POST http://localhost:8080/api/v1/jobs
 Content-Type: application/json

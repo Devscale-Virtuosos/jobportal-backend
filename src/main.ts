@@ -1,3 +1,4 @@
+import { authRouter } from "./routes/auth.route";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -5,6 +6,7 @@ import morgan from "morgan";
 import { errorHandlerMiddleware } from "./middlewares";
 import {
   applicantRouter,
+  applicationRouter,
   authRouter,
   companyRouter,
   jobRouter,
@@ -32,7 +34,8 @@ app.use(morgan("common")); // to log http request
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", jobRouter);
-app.use("/api/v1/applicants", applicantRouter); // Applicant routes
+app.use("/api/v1/applicants", applicantRouter);
+app.use("/api/v1/applications", applicationRouter);
 app.use("/api/v1/companies", companyRouter);
 app.use("/api/v1/users", userRouter);
 

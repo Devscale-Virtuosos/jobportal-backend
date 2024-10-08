@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ApplicationServices } from "../services"; // Assuming the service for applicant data exists
+import { ApplicantServices } from "../services"; // Assuming the service for applicant data exists
 import { createError } from "../utils";
 
 const applicantControllers = {
@@ -19,11 +19,7 @@ const applicantControllers = {
     };
 
     try {
-      const result = await ApplicationServices.getApplicants(
-        filter,
-        page,
-        limit
-      );
+      const result = await ApplicantServices.getApplicants(filter, page, limit);
       res.status(200).json({
         message: "Berhasil mendapatkan data applicants",
         data: result,
@@ -33,7 +29,6 @@ const applicantControllers = {
       next(error);
     }
   },
-
   deleteApplicant: async (
     req: Request,
     res: Response,
@@ -42,7 +37,7 @@ const applicantControllers = {
     const { id } = req.params as { id: string };
 
     try {
-      const result = await ApplicationServices.softDeleteApplicant(id); // Assuming a soft delete functionality
+      const result = await ApplicantServices.softDeleteApplicant(id); // Assuming a soft delete functionality
       if (result) {
         res.status(200).json({
           message: "Successfully marked applicant as deleted",
@@ -57,5 +52,4 @@ const applicantControllers = {
     }
   },
 };
-
 export default applicantControllers;
