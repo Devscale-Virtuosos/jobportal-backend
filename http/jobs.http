@@ -1,21 +1,10 @@
 ### Get All Jobs
-
-GET http://localhost:8080/api/v1/jobs?page=1&limit=5&placementType="remote"
+GET http://localhost:8080/api/v1/jobs
 
 ### Get Job Details
-GET http://localhost:8080/api/v1/jobs/66ff923c464168801739de47
+GET http://localhost:8080/api/v1/jobs/6707d2ac70f403bdf37047fc
 
-### Get Applicant List
-GET http://localhost:8080/api/v1/applicants
-
-### Get Application List for Job Hunter
-GET http://localhost:8080/api/v1/applications
-
-
-### Get Application Details for Job Hunter
-GET http://localhost:8080/api/v1/applications/{:id}
-
-### create job
+### Create Job
 POST http://localhost:8080/api/v1/jobs
 Content-Type: application/json
 
@@ -28,6 +17,27 @@ Content-Type: application/json
   "placementType": "remote",
   "location": "New York",
   "status": "draft",
-#   "companyId": "60c72b2f9b1d4c6d885f1e1d",
+  # "companyId": "60c72b2f9b1d4c6d885f1e1d",
   "userId": "60c72b2f9b1d4c6d885f1e1e"
+}
+
+### Generate Job Description
+POST http://localhost:8080/api/v1/jobs/generate/description
+Content-Type: application/json
+
+{
+  "title": "Full-Stack Developer",
+  "experienceLevel": "Senior",
+  "requiredSkills": ["Mongodb", "Express.js", "React.js", "Node.js", "TailwindCSS"]
+}
+
+### Apply Job
+POST http://localhost:8080/api/v1/jobs/6707907e4f6b050849663416/apply
+Content-Type: application/json
+
+{
+  "resumeText": "",
+  "skills": ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js"],
+  "yearOfExperience": 3,
+  "education": "S1"
 }

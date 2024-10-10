@@ -1,23 +1,14 @@
 import mongoose from "mongoose";
+import { APPLICATION_STATUS } from "../../constants";
 
 const ApplicationSchema = new mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    jobDetail: {
-      id: { type: mongoose.Schema.Types.ObjectId, ref: "Job", required: true },
-      title: { type: String, required: true },
-      description: { type: String, required: true },
-      experienceLevel: { type: String, required: true },
-      company: {
-        name: { type: String, required: true },
-        id: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Company",
-          required: true,
-        },
-        // Add other fields here
-      },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
+    jobId: { type: mongoose.Schema.Types.ObjectId, ref: "Job", required: true },
     resumeId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Resume",
@@ -25,9 +16,16 @@ const ApplicationSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["applied", "interviewed", "offered", "rejected"],
-      default: "applied",
+      enum: [
+        APPLICATION_STATUS.APPLIED,
+        APPLICATION_STATUS.REVIEWED,
+        APPLICATION_STATUS.IN_PROGRESS,
+        APPLICATION_STATUS.ACCEPTED,
+        APPLICATION_STATUS.REJECTED,
+      ],
+      default: APPLICATION_STATUS.APPLIED,
     },
+    relevancyScore: { type: Number, required: true },
     deletedAt: { type: Date, default: null },
   },
   {
@@ -37,9 +35,9 @@ const ApplicationSchema = new mongoose.Schema(
 
 export type IApplication = mongoose.InferSchemaType<typeof ApplicationSchema>;
 
-const applicationModel = mongoose.model<IApplication>(
-  "Application",
-  ApplicationSchema
-);
+export type TInputApplication = Omit<
+  IApplication,
+  "createdAt" | "updatedAt" | "deletedAt"
+>;
 
-export default applicationModel;
+export default mongoose.model<IApplication>("Application", ApplicationSchema);

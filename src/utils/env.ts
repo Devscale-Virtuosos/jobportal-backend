@@ -15,4 +15,5 @@ export const env = cleanEnv(process.env, {
   REFRESH_TOKEN_EXPIRES_TIME: str(),
   CLIENT_AUTH_SUCCESS_REDIRECT_URL: str(),
   CLIENT_URL: str(),
+  OPENAI_API_KEY: str(),
 });

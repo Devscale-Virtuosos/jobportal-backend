@@ -95,9 +95,9 @@ const AuthControllers = {
       // delete refresh token from database
       const result = await AuthServices.delete(refreshToken);
 
-      if (!result) {
-        throw createError(400, "Failed to delete refresh token");
-      }
+      // if (!result) {
+      //   throw createError(400, "Failed to delete refresh token");
+      // }
 
       res
         .clearCookie("refreshToken")

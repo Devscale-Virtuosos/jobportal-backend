@@ -1,4 +1,5 @@
-import applicationModel, { IApplication } from "./models/application.model"; // Adjust path as necessary
+import { Types } from "mongoose";
+import { ApplicationModel, IApplication, TInputApplication } from "./models";
 
 interface ApplicationFilter {
   status?: string;
@@ -6,6 +7,16 @@ interface ApplicationFilter {
 }
 
 const ApplicationRepositories = {
+  create: async (data: TInputApplication) => {
+    try {
+      const application = new ApplicationModel(data);
+      const savedApplication = application.save();
+
+      return savedApplication;
+    } catch (error) {
+      throw error;
+    }
+  },
   getApplications: async (
     filter: ApplicationFilter,
     page: number,
@@ -17,8 +28,7 @@ const ApplicationRepositories = {
     if (filter.createdAt) completeFilter.createdAt = { $gte: filter.createdAt };
 
     try {
-      const applications = await applicationModel
-        .find(completeFilter)
+      const applications = await ApplicationModel.find(completeFilter)
         .skip((page - 1) * limit)
         .limit(limit)
         .populate("user jobDetail resumeId") // Assuming relationships with user and jobDetail
@@ -34,7 +44,7 @@ const ApplicationRepositories = {
 
   softDeleteApplication: async (id: string) => {
     try {
-      const result = await applicationModel.findByIdAndUpdate(
+      const result = await ApplicationModel.findByIdAndUpdate(
         id,
         { deletedAt: new Date() },
         { new: true }
@@ -52,14 +62,26 @@ const ApplicationRepositories = {
   // New method to get application by ID
   getApplicationById: async (id: string): Promise<IApplication | null> => {
     try {
-      const application = await applicationModel
-        .findOne({ _id: id, deletedAt: null })
+      const application = await ApplicationModel.findOne({
+        _id: id,
+        deletedAt: null,
+      })
         .populate("user jobDetail resumeId")
         .exec();
       return application;
     } catch (error) {
       console.error("Error retrieving application by ID:", error);
       throw new Error("Failed to retrieve application");
+    }
+  },
+  getApplicationsByJobId: async (jobId: Types.ObjectId) => {
+    try {
+      const applications = await ApplicationModel.find({ jobId })
+        .populate("userId", "name email picture")
+        .populate("resumeId", "skills yearOfExperience education");
+      return applications;
+    } catch (error) {
+      throw error;
     }
   },
 };
