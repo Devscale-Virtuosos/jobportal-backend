@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 import { TTokenPayload } from "../types";
 import { createError } from "../utils";
 import { CompanyServices } from "../services";
@@ -15,15 +16,6 @@ const CompanyControllers = {
 
       const companyId = req.params.companyId;
       const { userId, name, location, industry, description, logo } = req.body;
-      console.log({
-        userId,
-        name,
-        location,
-        industry,
-        description,
-        logo,
-        body: req.body,
-      });
 
       // Cek apakah user id dalam cookie (user yang melakukan request) sama dengan userId dalam data company (pemilik company)
       if (userData!.id !== userId) {
@@ -31,7 +23,7 @@ const CompanyControllers = {
       }
 
       const updatedCompany = await CompanyServices.update(companyId, {
-        userId,
+        userId: new Types.ObjectId(userId),
         name,
         location,
         industry,

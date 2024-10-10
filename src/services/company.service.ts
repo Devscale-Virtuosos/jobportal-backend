@@ -15,6 +15,14 @@ const CompanyServices = {
     }
     return company;
   },
+  getCompanyByUserId: async (userId: Types.ObjectId) => {
+    try {
+      const userCompany = await CompanyRepositories.getByUserId(userId);
+      return userCompany;
+    } catch (error) {
+      throw error;
+    }
+  },
   update: async (companyId: string, updatedData: TCompany) => {
     try {
       // Input validation

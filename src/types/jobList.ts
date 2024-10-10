@@ -1,4 +1,4 @@
-import { IJob } from "../repositories/models/job.list.model";
+import { IJob } from "../repositories/models";
 
 export interface JobListResponse {
   message: string;

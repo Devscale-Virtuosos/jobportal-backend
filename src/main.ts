@@ -1,7 +1,7 @@
-import { authRouter } from "./routes/auth.route";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import morgan from "morgan";
 import { errorHandlerMiddleware } from "./middlewares";
 import {
@@ -25,6 +25,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("common")); // to log http request
 

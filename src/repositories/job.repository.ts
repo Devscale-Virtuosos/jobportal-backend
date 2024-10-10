@@ -1,5 +1,6 @@
+import { Types } from "mongoose";
 import { JobFilter } from "../types/jobList";
-import jobListModel, { IJob } from "./models/job.list.model";
+import { JobModel, IJob, TInputJob } from "./models";
 
 const JobRepository = {
   getJobList: async (
@@ -24,8 +25,8 @@ const JobRepository = {
       };
 
     try {
-      const jobs = await jobListModel
-        .find(completeFilter)
+      const jobs = await JobModel.find(completeFilter)
+        .populate("companyId")
         .skip((page - 1) * limit)
         .limit(limit)
         .exec();
@@ -41,7 +42,7 @@ const JobRepository = {
 
   softDeleteJob: async (id: string) => {
     try {
-      const result = await jobListModel.findByIdAndUpdate(
+      const result = await JobModel.findByIdAndUpdate(
         id,
         { deletedAt: new Date() },
         { new: true }
@@ -58,27 +59,44 @@ const JobRepository = {
 
   getJobDetailById: async (id: string) => {
     try {
-      const jobDetail = await jobListModel.findById(id).exec();
-      if (!jobDetail || jobDetail.deletedAt) {
-        throw new Error("Job not found");
-      }
+      const jobDetail = await JobModel.findOne({ _id: id, deletedAt: null })
+        .populate("companyId")
+        .exec();
+
+      // if (!jobDetail || jobDetail.deletedAt) {
+      //   throw new Error("Job not found");
+      // }
       return jobDetail;
     } catch (error) {
       console.error("Error retrieving job detail:", error);
       throw new Error("Failed to retrieve job detail");
     }
   },
-
-  createJob: async (jobData: IJob) => {
+  createJob: async (jobData: TInputJob) => {
     try {
-      const job = new jobListModel(jobData);
+      const job = new JobModel(jobData);
       const savedJob = await job.save();
-      // populate the company data
-      const populatedJob = await savedJob.populate("companyId");
-      return populatedJob;
+
+      return savedJob;
     } catch (error) {
       console.error("Error creating job:", error);
       throw new Error("Failed to create job");
+    }
+  },
+  update: async (jobId: Types.ObjectId, updatedData: TInputJob) => {
+    try {
+      const updatedJob = await JobModel.findByIdAndUpdate(jobId, updatedData);
+      return updatedJob;
+    } catch (error) {
+      throw error;
+    }
+  },
+  updateStatus: async (jobId: Types.ObjectId, status: string) => {
+    try {
+      const updatedJob = await JobModel.findByIdAndUpdate(jobId, { status });
+      return updatedJob;
+    } catch (error) {
+      throw error;
     }
   },
 };
