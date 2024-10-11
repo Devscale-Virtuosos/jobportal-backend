@@ -166,8 +166,8 @@ const JobControllers = {
       } = req.body;
 
       const updatedJob = await JobServices.updateJob(jobId, {
-        userId,
-        companyId,
+        userId: new Types.ObjectId(userId),
+        companyId: new Types.ObjectId(companyId),
         title,
         description,
         requiredSkills,
