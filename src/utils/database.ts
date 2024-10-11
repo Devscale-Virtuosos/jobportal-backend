@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { env } from "./env";
 import applicantModel from "../repositories/models/applicant.list.model";
 import applicationModel from "../repositories/models/application.model";
-import jobListModel from "../repositories/models/job.list.model";
+import jobListModel from "../repositories/models/job.model";
 
 // insert sample jobs data
 const insertJob = async () => {

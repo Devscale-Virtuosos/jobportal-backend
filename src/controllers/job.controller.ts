@@ -1,7 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+import { Types } from "mongoose";
 import { JobFilter } from "../types/jobList";
 import { CompanyServices, JobServices } from "../services";
 import { createError } from "../utils";
+import { TTokenPayload } from "../types";
 
 const JobControllers = {
   getJobList: async (req: Request, res: Response, next: NextFunction) => {
@@ -62,38 +64,58 @@ const JobControllers = {
       next(error);
     }
   },
+  getJobApplications: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { id } = req.params as { id: string };
+    const jobId = new Types.ObjectId(id);
+    try {
+      const applications = await JobServices.getJobApplications(jobId);
 
+      res.status(200).json({
+        message: "Successfully get job applicantions",
+        data: applications,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
   createJob: async (req: Request, res: Response, next: NextFunction) => {
-    const userCookie = req.cookies.user;
-
-    if (!userCookie) return next(createError(401, "Unauthorized"));
-
-    const userData = JSON.parse(userCookie);
+    const { user } = req.cookies;
+    const userData: TTokenPayload = JSON.parse(user);
 
     try {
-      const { companyId, userId, ...jobData } = req.body;
-
-      // Check if companyId exists
-      if (!companyId) {
-        return next(createError(400, "Company ID is required to create a job"));
-      }
-
-      // Check if userId matches userData.id from cookie
-      if (userData.id !== userId) {
-        return next(createError(403, "Forbidden: User ID mismatch"));
-      }
+      const {
+        title,
+        description,
+        requiredSkills,
+        experienceLevel,
+        type,
+        placementType,
+        location,
+        status,
+      } = req.body;
 
       // Verify company existence
-      const company = await CompanyServices.getCompanyById(companyId);
+      const company = await CompanyServices.getCompanyByUserId(userData!.id);
       if (!company) {
-        return next(createError(404, "Company not found"));
+        throw createError(404, "Company not found");
       }
 
       // Create new job
       const newJob = await JobServices.createJob({
-        ...jobData,
-        createdBy: userData.id, // Use id from cookie
-        companyId: companyId,
+        userId: new Types.ObjectId(userData!.id),
+        companyId: company._id,
+        title,
+        description,
+        requiredSkills,
+        experienceLevel,
+        type,
+        placementType,
+        location,
+        status,
       });
 
       // Return success response
@@ -102,7 +124,100 @@ const JobControllers = {
         .json({ message: "Job created successfully", data: newJob });
     } catch (error) {
       console.error("Error creating job:", error); // Log detailed error
-      next(createError(500, "Failed to create job")); // Send generic error message
+      next(error); // Send generic error message
+    }
+  },
+  generateJobDescription: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { title, experienceLevel, requiredSkills } = req.body;
+
+      const result = await JobServices.generateJobDescription({
+        title,
+        experienceLevel,
+        requiredSkills,
+      });
+
+      res.status(200).json({
+        message: "Successfully generate job description",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  updateJob: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobId = new Types.ObjectId(req.params.id);
+      const {
+        userId,
+        companyId,
+        title,
+        description,
+        requiredSkills,
+        experienceLevel,
+        type,
+        placementType,
+        location,
+        status,
+      } = req.body;
+
+      const updatedJob = await JobServices.updateJob(jobId, {
+        userId: new Types.ObjectId(userId),
+        companyId: new Types.ObjectId(companyId),
+        title,
+        description,
+        requiredSkills,
+        experienceLevel,
+        type,
+        placementType,
+        location,
+        status,
+      });
+
+      res
+        .status(200)
+        .json({ message: "Successfully update job", data: updatedJob });
+    } catch (error) {
+      next(error);
+    }
+  },
+  updateJobStatus: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const jobId = new Types.ObjectId(req.params.id);
+      const { status } = req.body;
+
+      const updatedJob = await JobServices.updateJobStatus(jobId, status);
+
+      res
+        .status(200)
+        .json({ message: "Successfully update job status", data: updatedJob });
+    } catch (error) {
+      next(error);
+    }
+  },
+  applyJob: async (req: Request, res: Response, next: NextFunction) => {
+    const { user } = req.cookies;
+    const userData: TTokenPayload = JSON.parse(user);
+
+    try {
+      const jobId = new Types.ObjectId(req.params.id);
+      const { resumeText, skills, yearOfExperience, education } = req.body;
+
+      await JobServices.applyJob(jobId, {
+        userId: new Types.ObjectId(userData?.id),
+        resumeText,
+        skills,
+        yearOfExperience,
+        education,
+      });
+
+      res.status(200).json({ message: "Success apply to the job", data: null });
+    } catch (error) {
+      next(error);
     }
   },
 };

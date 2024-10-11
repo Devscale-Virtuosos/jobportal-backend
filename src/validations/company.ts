@@ -1,8 +1,9 @@
 import z from "zod";
 import { TCompany } from "../repositories/models";
+import { Types } from "mongoose";
 
 export const inputCompanySchema = z.object({
-  userId: z.string(),
+  userId: z.instanceof(Types.ObjectId),
   name: z.string(),
   location: z.string(),
   industry: z.string(),
