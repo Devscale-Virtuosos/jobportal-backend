@@ -8,8 +8,8 @@ WORKDIR /app
 COPY package*.json pnpm-lock.yaml ./
 
 # Menginstall global dependencies (pnpm & typescript)
-RUN npm install -g pnpm
-RUN npm install -g typescript
+RUN bun install -g pnpm@latest
+RUN bun install -g typescript
 
 # Menginstall dependensi menggunakan pnpm
 RUN pnpm install
