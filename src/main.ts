@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import morgan from "morgan";
+import helmet from "helmet";
 import { errorHandlerMiddleware } from "./middlewares";
 import {
   applicantRouter,
@@ -18,6 +19,8 @@ connectMongodb();
 
 const app = express();
 
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })); // to allow us to make cros origin sharing request (API call from another server)
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
