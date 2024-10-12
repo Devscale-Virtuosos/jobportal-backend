@@ -18,21 +18,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
       
-      - name: Setup Bun.js
+      - name: Setup Node.js
         run: |
-          if ! command -v bun &> /dev/null
-          then
-            curl -fsSL https://bun.sh/install | bash
-          fi
-          export BUN_INSTALL="$HOME/.bun"
-          export PATH="$BUN_INSTALL/bin:$PATH"
-          bun --version
-
-          if ! command -v pnpm &> /dev/null
-          then
-            npm install -g pnpm
-          fi
-          pnpm --version
+          npm install -g pnpm@latest
+          pnpm install
       
       - name: Build Docker Image
         run: docker build -t indraarianggi/virtuosos-jobportal .
