@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { env } from "../utils";
 
 export function errorHandlerMiddleware(
   err: any,
@@ -17,9 +18,9 @@ export function errorHandlerMiddleware(
 
   if (errStatus === 401 || errStatus == 403) {
     res
-      .clearCookie("refreshToken")
-      .clearCookie("accessToken")
-      .clearCookie("user")
+      .clearCookie("refreshToken", { domain: env.DOMAIN })
+      .clearCookie("accessToken", { domain: env.DOMAIN })
+      .clearCookie("user", { domain: env.DOMAIN })
       .status(errStatus)
       .json({ message: errMessage, stack: errStack, data: null });
     return;

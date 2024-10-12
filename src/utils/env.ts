@@ -16,4 +16,5 @@ export const env = cleanEnv(process.env, {
   CLIENT_AUTH_SUCCESS_REDIRECT_URL: str(),
   CLIENT_URL: str(),
   OPENAI_API_KEY: str(),
+  DOMAIN: str(),
 });

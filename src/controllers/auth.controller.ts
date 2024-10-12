@@ -12,8 +12,8 @@ const AuthControllers = {
         await AuthServices.generateGoogleAuthorization();
 
       res
-        .cookie("codeVerifier", codeVerifier)
-        .cookie("role", role)
+        .cookie("codeVerifier", codeVerifier, { domain: env.DOMAIN })
+        .cookie("role", role, { domain: env.DOMAIN })
         .redirect(authorizationURL);
     } catch (error) {
       next(error);
@@ -24,7 +24,7 @@ const AuthControllers = {
       const { authorizationURL, codeVerifier } =
         await AuthServices.generateGoogleAuthorization();
 
-      res.cookie("codeVerifier", codeVerifier).redirect(authorizationURL);
+      res.cookie("codeVerifier", codeVerifier, { domain: env.DOMAIN }).redirect(authorizationURL);
     } catch (error) {
       next(error);
     }
@@ -70,17 +70,20 @@ const AuthControllers = {
       }
 
       res
-        .cookie("refreshToken", refreshToken, { httpOnly: true })
-        .cookie("accessToken", accessToken)
-        .cookie("user", JSON.stringify(payload))
-        .clearCookie("codeVerifier")
-        .clearCookie("role")
+        .cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          domain: env.DOMAIN,
+        })
+        .cookie("accessToken", accessToken, { domain: env.DOMAIN })
+        .cookie("user", JSON.stringify(payload), { domain: env.DOMAIN })
+        .clearCookie("codeVerifier", { domain: env.DOMAIN })
+        .clearCookie("role", { domain: env.DOMAIN })
         .status(200)
         .redirect(env.CLIENT_AUTH_SUCCESS_REDIRECT_URL);
     } catch (error: any) {
       res
-        .clearCookie("codeVerifier")
-        .clearCookie("role")
+        .clearCookie("codeVerifier", { domain: env.DOMAIN })
+        .clearCookie("role", { domain: env.DOMAIN })
         .redirect(
           `${env.CLIENT_URL}${
             role ? "/register" : "/login"
@@ -100,9 +103,9 @@ const AuthControllers = {
       // }
 
       res
-        .clearCookie("refreshToken")
-        .clearCookie("accessToken")
-        .clearCookie("user")
+        .clearCookie("refreshToken", { domain: env.DOMAIN })
+        .clearCookie("accessToken", { domain: env.DOMAIN })
+        .clearCookie("user", { domain: env.DOMAIN })
         .json({ message: "Logout success!" });
     } catch (error) {
       next(error);

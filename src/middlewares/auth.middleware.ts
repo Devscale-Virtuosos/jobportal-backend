@@ -56,7 +56,7 @@ export async function verifyAccessToken(
         { expiresIn: env.ACCESS_TOKEN_EXPIRES_TIME }
       );
 
-      res.cookie("accessToken", newAccessToken);
+      res.cookie("accessToken", newAccessToken, { domain: env.DOMAIN });
       next();
     } catch (error) {
       next(error);
