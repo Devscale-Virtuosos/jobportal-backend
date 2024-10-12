@@ -46,16 +46,16 @@ jobs:
             docker stop virtuosos-jobportal-be || true
             docker rm virtuosos-jobportal-be || true
             docker run -d \
-              -e PORT="${{ secrets.PORT }}" \
-              -e GOOGLE_CLIENT_ID=$"{{ secrets.GOOGLE_CLIENT_ID }}" \
-              -e GOOGLE_CLIENT_SECRET=$"{{ secrets.GOOGLE_CLIENT_SECRET }}" \
-              -e GOOGLE_REDIRECT_URL=$"{{ secrets.GOOGLE_REDIRECT_URL }}" \
-              -e MONGO_URI=$"{{ secrets.MONGO_URI }}" \
-              -e ACCESS_TOKEN_SECRET=$"{{ secrets.ACCESS_TOKEN_SECRET }}" \
-              -e REFRESH_TOKEN_SECRET=$"{{ secrets.REFRESH_TOKEN_SECRET }}" \
-              -e ACCESS_TOKEN_EXPIRES_TIME=$"{{ secrets.ACCESS_TOKEN_EXPIRES_TIME }}" \
-              -e REFRESH_TOKEN_EXPIRES_TIME=$"{{ secrets.REFRESH_TOKEN_EXPIRES_TIME }}" \
-              -e CLIENT_URL=$"{{ secrets.CLIENT_URL }}" \
-              -e CLIENT_AUTH_SUCCESS_REDIRECT_URL=$"{{ secrets.CLIENT_AUTH_SUCCESS_REDIRECT_URL }}" \
-              -e OPENAI_API_KEY=$"{{ secrets.OPENAI_API_KEY }}" \
+              -e PORT="${{ secrets.PORT }}"" \
+              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
+              -e GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+              -e GOOGLE_REDIRECT_URL="${{ secrets.GOOGLE_REDIRECT_URL }}" \
+              -e MONGO_URI="${{ secrets.MONGO_URI }}" \
+              -e ACCESS_TOKEN_SECRET="${{ secrets.ACCESS_TOKEN_SECRET }}" \
+              -e REFRESH_TOKEN_SECRET="${{ secrets.REFRESH_TOKEN_SECRET }}" \
+              -e ACCESS_TOKEN_EXPIRES_TIME="${{ secrets.ACCESS_TOKEN_EXPIRES_TIME }}" \
+              -e REFRESH_TOKEN_EXPIRES_TIME="${{ secrets.REFRESH_TOKEN_EXPIRES_TIME }}" \
+              -e CLIENT_URL="${{ secrets.CLIENT_URL }}" \
+              -e CLIENT_AUTH_SUCCESS_REDIRECT_URL="${{ secrets.CLIENT_AUTH_SUCCESS_REDIRECT_URL }}" \
+              -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
               --name virtuosos-jobportal-be -p 8080:8080 indraarianggi/virtuosos-jobportal-be
