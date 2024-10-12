@@ -1,4 +1,3 @@
-export { default as applicantControllers } from "./applicant.controller";
 export { default as applicationControllers } from "./application.controller";
 export { default as AuthControllers } from "./auth.controller";
 export { default as CompanyControllers } from "./company.controller";

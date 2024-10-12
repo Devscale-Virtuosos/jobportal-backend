@@ -1,15 +1,18 @@
+import { Types } from "mongoose";
 import ApplicationRepositories from "../repositories/application.repository";
 import { IApplication } from "../repositories/models/application.model";
 import { createError } from "../utils";
 
 const ApplicationServices = {
   getApplications: async (
+    userId: Types.ObjectId,
     filter: { status?: string; createdAt?: Date },
     page: number,
     limit: number
   ): Promise<IApplication[]> => {
     try {
       const applications = await ApplicationRepositories.getApplications(
+        userId,
         filter,
         page,
         limit

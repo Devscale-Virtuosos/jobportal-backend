@@ -1,15 +1,21 @@
 import { Request, Response } from "express";
 import applicationService from "../services/application.service";
+import { TTokenPayload } from "../types";
+import { Types } from "mongoose";
 
 const applicationController = {
   // Existing method to get applications
   getApplications: async (req: Request, res: Response): Promise<void> => {
+    const { user } = req.cookies;
+    const userData: TTokenPayload = JSON.parse(user);
+
     const { status, createdAt } = req.query;
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
 
     try {
       const result = await applicationService.getApplications(
+        new Types.ObjectId(userData?.id),
         {
           status: status as string,
           createdAt: createdAt ? new Date(createdAt as string) : undefined,

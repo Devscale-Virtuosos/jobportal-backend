@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import { errorHandlerMiddleware } from "./middlewares";
 import {
-  applicantRouter,
   applicationRouter,
   authRouter,
   companyRouter,
@@ -35,7 +34,6 @@ app.use(
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/jobs", jobRouter);
-app.use("/api/v1/applicants", applicantRouter);
 app.use("/api/v1/applications", applicationRouter);
 app.use("/api/v1/companies", companyRouter);
 app.use("/api/v1/users", userRouter);

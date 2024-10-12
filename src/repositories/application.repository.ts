@@ -18,20 +18,23 @@ const ApplicationRepositories = {
     }
   },
   getApplications: async (
+    userId: Types.ObjectId,
     filter: ApplicationFilter,
     page: number,
     limit: number
   ): Promise<IApplication[]> => {
-    const completeFilter: any = { deletedAt: null }; // Ensures soft deleted apps aren't fetched
+    const completeFilter: any = { userId, deletedAt: null }; // Ensures soft deleted apps aren't fetched
 
     if (filter.status) completeFilter.status = filter.status;
     if (filter.createdAt) completeFilter.createdAt = { $gte: filter.createdAt };
 
     try {
       const applications = await ApplicationModel.find(completeFilter)
+        .select("-relevancyScore")
         .skip((page - 1) * limit)
         .limit(limit)
-        .populate("user jobDetail resumeId") // Assuming relationships with user and jobDetail
+        .populate("userId resumeId")
+        .populate({ path: "jobId", populate: { path: "companyId" } })
         .exec();
 
       console.log("Retrieved Applications:", applications);
