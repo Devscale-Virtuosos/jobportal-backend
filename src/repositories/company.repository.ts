@@ -11,6 +11,7 @@ const CompanyRepositories = {
     }
   },
   getByUserId: async (userId: Types.ObjectId) => {
+    console.log({ userId });
     try {
       const company = await CompanyModel.findOne({ userId });
       return company;

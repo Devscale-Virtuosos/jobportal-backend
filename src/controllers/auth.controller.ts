@@ -74,8 +74,14 @@ const AuthControllers = {
           httpOnly: true,
           domain: env.DOMAIN,
         })
-        .cookie("accessToken", accessToken, { domain: env.DOMAIN })
-        .cookie("user", JSON.stringify(payload), { domain: env.DOMAIN })
+        .cookie("accessToken", accessToken, {
+          domain: env.DOMAIN,
+          sameSite: "lax",
+        })
+        .cookie("user", JSON.stringify(payload), {
+          domain: env.DOMAIN,
+          sameSite: "lax",
+        })
         .clearCookie("codeVerifier", { domain: env.DOMAIN })
         .clearCookie("role", { domain: env.DOMAIN })
         .status(200)

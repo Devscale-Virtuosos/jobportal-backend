@@ -10,6 +10,7 @@ export async function verifyAccessToken(
   next: NextFunction
 ) {
   const { accessToken, refreshToken } = req.cookies;
+  console.log("verifyAccessToken", { accessToken });
 
   // check if access token exists
   if (!accessToken) {
@@ -56,7 +57,12 @@ export async function verifyAccessToken(
         { expiresIn: env.ACCESS_TOKEN_EXPIRES_TIME }
       );
 
-      res.cookie("accessToken", newAccessToken, { domain: env.DOMAIN });
+      console.log("verifyAccessToken REGENERATE", { newAccessToken });
+
+      res.cookie("accessToken", newAccessToken, {
+        domain: env.DOMAIN,
+        sameSite: "lax",
+      });
       next();
     } catch (error) {
       next(error);
