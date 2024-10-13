@@ -46,6 +46,26 @@ const ApplicationServices = {
       throw createError(500, "Failed to fetch application");
     }
   },
+
+  updateApplicationStatus: async (
+    applicationId: Types.ObjectId,
+    status: string
+  ) => {
+    try {
+      // Input validation
+      if (!status) {
+        throw createError(400, "status is required");
+      }
+
+      const updatedApplication = await ApplicationRepositories.updateStatus(
+        applicationId,
+        status
+      );
+      return updatedApplication;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default ApplicationServices;

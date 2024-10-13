@@ -16,5 +16,10 @@ applicationRouter.get(
   verifyAccessToken,
   applicationController.getApplicationById
 );
+applicationRouter.patch(
+  "/:id/status",
+  verifyAccessToken,
+  applicationController.updateApplicationStatus
+);
 
 export { applicationRouter }; // Named export

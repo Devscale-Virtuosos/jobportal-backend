@@ -12,8 +12,6 @@ const UserControllers = {
       const { user } = req.cookies;
       const userData: TTokenPayload = JSON.parse(user);
 
-      console.log({ cookies: req.cookies, user, userData });
-
       const userCompany = await UserServices.getCompany(userData!.id);
 
       res.status(200).json({

@@ -80,9 +80,21 @@ const ApplicationRepositories = {
   getApplicationsByJobId: async (jobId: Types.ObjectId) => {
     try {
       const applications = await ApplicationModel.find({ jobId })
-        .populate("userId", "name email picture")
-        .populate("resumeId", "skills yearOfExperience education");
+        .populate("userId resumeId")
+        .populate({ path: "jobId", populate: { path: "companyId" } })
+        .exec();
       return applications;
+    } catch (error) {
+      throw error;
+    }
+  },
+  updateStatus: async (applicationId: Types.ObjectId, status: string) => {
+    try {
+      const updatedApplication = await ApplicationModel.findByIdAndUpdate(
+        applicationId,
+        { status }
+      );
+      return updatedApplication;
     } catch (error) {
       throw error;
     }
