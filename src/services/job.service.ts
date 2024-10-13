@@ -156,7 +156,7 @@ const jobListServices = {
     try {
       // Input validation
       if (status) {
-        throw createError(404, "status is required");
+        throw createError(400, "status is required");
       }
 
       const updatedJob = await JobRepositories.updateStatus(jobId, status);
