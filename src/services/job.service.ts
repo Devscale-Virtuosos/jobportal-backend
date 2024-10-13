@@ -155,7 +155,7 @@ const jobListServices = {
   updateJobStatus: async (jobId: Types.ObjectId, status: string) => {
     try {
       // Input validation
-      if (status) {
+      if (!status) {
         throw createError(400, "status is required");
       }
 
