@@ -11,11 +11,13 @@ const JobRepository = {
     const completeFilter: any = { deletedAt: null };
 
     // Terapkan $regex untuk pencarian teks agar lebih fleksibel
+    if (filter.userId) completeFilter.userId = filter.userId;
     if (filter.title)
       completeFilter.title = { $regex: filter.title, $options: "i" };
     if (filter.experienceLevel)
       completeFilter.experienceLevel = filter.experienceLevel;
     if (filter.type) completeFilter.type = filter.type;
+    if (filter.status) completeFilter.status = filter.status;
     if (filter.placementType)
       completeFilter.placementType = filter.placementType;
     if (filter.location)

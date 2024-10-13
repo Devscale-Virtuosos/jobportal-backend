@@ -6,9 +6,11 @@ export interface JobListResponse {
 }
 
 export interface JobFilter {
+  userId?: string;
   title?: string;
   experienceLevel?: string;
   type?: string;
+  status?: string;
   placementType?: string;
   location?: string;
 }

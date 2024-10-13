@@ -4,6 +4,7 @@ import { JobFilter } from "../types/jobList";
 import { CompanyServices, JobServices } from "../services";
 import { createError } from "../utils";
 import { TTokenPayload } from "../types";
+import { JOB_STATUS } from "../constants";
 
 const JobControllers = {
   getJobList: async (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +17,7 @@ const JobControllers = {
       title: title ? title.toString() : undefined,
       experienceLevel: experienceLevel ? experienceLevel.toString() : undefined,
       type: type ? type.toString() : undefined,
+      status: JOB_STATUS.PUBLISHED,
       placementType: placementType ? placementType.toString() : undefined,
       location: location ? location.toString() : undefined,
     };

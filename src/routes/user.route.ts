@@ -9,3 +9,5 @@ userRouter.get(
   verifyAccessToken,
   UserControllers.handleGetUserCompany
 );
+
+userRouter.get("/jobs", verifyAccessToken, UserControllers.handleGetUserJobs);
